@@ -1,0 +1,32 @@
+﻿@model List<AspNetMVCCRUD.Models.Employee>
+@{
+
+}
+<h1>Employees List</h1>
+<table class="table">
+   <thead>
+       <tr>
+           <th>ID</th>
+           <th>Name</th>
+           <th>Email</th>
+           <th>Salary</th>
+           <th>Dep</th>
+           <th>DOB</th>
+           <th> </th>
+       </tr>
+   </thead>
+   <tbody>
+        @foreach(var employee in Model)
+        {
+            <tr>
+                <td>@employee.EmpID</td>
+                <td>@employee.Name</td>
+                <td>@employee.Email</td>
+                <td>@employee.Salary</td>
+                <td>@employee.Dep</td>
+                <td>@employee.DOB</td>
+                <td><a href="Employee/View/@employee.EmpID">View</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

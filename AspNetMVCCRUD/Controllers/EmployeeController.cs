@@ -50,7 +50,7 @@ namespace AspNetMVCCRUD.Controllers
            await mVCDBContext.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-        // view the details of employee
+        // view the details of employee facing issue in the View
         [HttpGet]
         // error solved by using FirstOrDefault Instead of FristOrDefaultAsync using no async
         public async Task<IActionResult> View(Guid Id)

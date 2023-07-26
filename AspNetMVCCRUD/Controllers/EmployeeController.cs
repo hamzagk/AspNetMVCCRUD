@@ -48,7 +48,7 @@ namespace AspNetMVCCRUD.Controllers
            await mVCDBContext.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-        // view the details of employee
+        // view the details of employee facing issue in the View
         [HttpGet]
         public async Task<ActionResult> View(Guid Id)
         {

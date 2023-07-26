@@ -28,7 +28,10 @@
         <label for="" class="form-label">DOB</label>
         <input type="date" class="form-control" asp-for="DOB">
     </div>
-    <div class="col-12">
+    <div class="col-6">
         <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <div class="col-6">
+        <button type="submit" class="btn btn-danger" asp-action="Delete" asp-controller="Employee">Delete</button>
     </div>
 </form>

@@ -1,7 +1,9 @@
 ﻿using AspNetMVCCRUD.Data;
 using AspNetMVCCRUD.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 
 namespace AspNetMVCCRUD.Controllers
 {
@@ -50,16 +52,56 @@ namespace AspNetMVCCRUD.Controllers
         }
         // view the details of employee
         [HttpGet]
-        public async Task<ActionResult> View(Guid Id)
+        // error solved by using FirstOrDefault Instead of FristOrDefaultAsync using no async
+        public async Task<IActionResult> View(Guid Id)
         {
+            var employees =await mVCDBContext.Employees.FirstOrDefaultAsync(x => x.EmpID == Id);
             // fetching the single employee
-           var employee= mVCDBContext.Employees.FirstOrDefaultAsync(x => x.EmpID == Id);
-            var viewModel = new updateemployeeViewModel()
-     {
-                 
-
+            if(employees != null) {
+                var viewModel = new updateemployeeViewModel()
+                {
+                    EmpID = employees.EmpID,
+                    Name = employees.Name,
+                    Email = employees.Email,
+                    Salary = employees.Salary,
+                    Dep = employees.Dep,
+                    DOB = employees.DOB
                 };
-            return View(employee);
+                // to solve the error we use await Task.Run()
+                return await Task.Run(()=>View("View",viewModel));
+            }
+            return RedirectToAction("Index");
         }
-    }
+        // funcationality for the update method now post
+        [HttpPost]
+        public async Task<IActionResult> View(updateemployeeViewModel model)
+        {
+            var employee=await mVCDBContext.Employees.FindAsync(model.EmpID);
+            if(employee != null)
+            {
+                employee.Name = model.Name;
+                employee.Email = model.Email;
+                employee.Salary = model.Salary;
+                employee.Dep = model.Dep;
+                employee.DOB = model.DOB;
+                await mVCDBContext.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
+        // delete Functionality
+        [HttpPost]
+        public async Task<IActionResult> Delete(updateemployeeViewModel model)
+        {
+            var employee = await mVCDBContext.Employees.FindAsync(model.EmpID);
+            if (employee != null)
+            {
+                mVCDBContext.Employees.Remove(employee);
+                await mVCDBContext.SaveChangesAsync();
+                return RedirectToAction("View");
+            }
+            return RedirectToAction("Index");
+        }
+         
+}
 }
